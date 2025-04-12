@@ -8,8 +8,7 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    // console.log(createCategoryDto.name)
+  create(@Body() createCategoryDto: CreateCategoryDto) {    
     return this.categoriesService.create(createCategoryDto);
   }
 
