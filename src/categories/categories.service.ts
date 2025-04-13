@@ -21,15 +21,17 @@ export class CategoriesService {
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepository.findOneBy({id});
+    const category = await this.categoryRepository.findOneBy({id})
     if(!category) {
-      throw new NotFoundException('La categoria no existe');
+      throw new NotFoundException('La categoria no existe')
     }
     return category;    
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.findOne(id)
+    category.name = updateCategoryDto.name
+    return await this.categoryRepository.save(category)
   }
 
   remove(id: number) {
