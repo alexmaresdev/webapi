@@ -24,11 +24,22 @@ export class ProductsService {
       throw new NotFoundException(errors)      
     }
 
-    console.log(category)
+    return this.productRepository.save({
+      ...createProductDto,
+      category
+    })
+    console.log(Product)
+   
   }
 
   findAll() {
-    return `This action returns all products`;
+    return this.productRepository.find({
+      relations: {
+        category: true
+      }, order: {
+        id: 'DESC'
+      }
+    })
   }
 
   findOne(id: number) {
