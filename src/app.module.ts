@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
 import { typeOrmConfig } from './config/typeorm.config';
 import { ProductsModule } from './products/products.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -14,7 +15,7 @@ import { ProductsModule } from './products/products.module';
     useFactory: typeOrmConfig,
     inject: [ConfigService]
   }), 
-  CategoriesModule, ProductsModule],  
+  CategoriesModule, ProductsModule, TransactionsModule],  
   controllers: [AppController],
   providers: [AppService],
   
