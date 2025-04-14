@@ -30,10 +30,10 @@ export class TransactionContents {
     @Column({type: 'decimal', precision: 10, scale:2})
     price: number
 
-    @ManyToOne(()=> Product, (product)=> product.id, {eager:true})
+    @ManyToOne(()=> Product, (product)=> product.id, {eager:true, cascade:true})
     product: Product
 
-    @ManyToOne(()=> Transaction, (transaction)=> transaction.contents)
+    @ManyToOne(()=> Transaction, (transaction)=> transaction.contents, {cascade:true})
     transaction: Transaction
 
 
