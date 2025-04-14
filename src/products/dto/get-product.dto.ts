@@ -10,4 +10,8 @@ export class GetProductsQueryDto {
     @IsNumberString({}, {message: 'La cantidad debe ser un numero'})
     take: number
 
+    @IsOptional()    
+    @IsNumberString({}, {message: 'La cantidad debe ser un numero'})
+    skip: number
+
 }

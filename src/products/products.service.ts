@@ -34,7 +34,7 @@ export class ProductsService {
 
   // Modificación importante:  categoryId ahora es opcional (number | undefined)
   // En TypeScript, todos los parámetros opcionales deben ir al final.
-  async findAll(take: number, categoryId?: number) {
+  async findAll(take: number, categoryId?: number, skip?: number) {
     const where: any = {}; // Inicializamos un objeto vacío para las condiciones del WHERE
 
     if (categoryId !== undefined) {
@@ -50,7 +50,8 @@ export class ProductsService {
       order: {
         id: 'DESC',
       },
-      take
+      take,
+      skip
     });
     return {
       products,
