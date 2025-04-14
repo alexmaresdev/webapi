@@ -14,11 +14,11 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query() query: GetProductsQueryDto) {
-    // console.log(query.category_id)
-    const category = query.category_id ? query.category_id : undefined 
-    console.log(category)   
-    return this.productsService.findAll(category);
+  findAll(@Query() query: GetProductsQueryDto) {    
+    const category = query.category_id ? query.category_id : undefined
+    const take = query.take ? query.take : 10  
+    
+    return this.productsService.findAll(take, category);
   }
 
   @Get(':id')
