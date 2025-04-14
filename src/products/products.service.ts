@@ -32,18 +32,28 @@ export class ProductsService {
    
   }
 
-  async findAll() {
-    const [data, total] = await this.productRepository.findAndCount({
-      relations: {
-        category: true
-      }, order: {
-        id: 'DESC'
-      }
-    })
-    return {
-      data,
-      total
+  // Modificación importante:  categoryId ahora es opcional (number | undefined)
+  async findAll(categoryId?: number) {
+    const where: any = {}; // Inicializamos un objeto vacío para las condiciones del WHERE
+
+    if (categoryId !== undefined) {
+      // Si categoryId tiene un valor, lo agregamos a las condiciones
+      where.category = { id: categoryId };
     }
+
+    const [products, total] = await this.productRepository.findAndCount({
+      relations: {
+        category: true,
+      },
+      where, // Usamos el objeto 'where' para aplicar el filtro
+      order: {
+        id: 'DESC',
+      },
+    });
+    return {
+      products,
+      total,
+    };
   }
 
   findOne(id: number) {
