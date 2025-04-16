@@ -119,7 +119,22 @@ export class TransactionsService {
   async remove(id: number) {
     const transaction = await this.findOne(id)
 
+    // Existe la transaccion?
+    if (!transaction) {
+      throw new NotFoundException(`Transaction with id ${id} not found`);
+    }
+
     for(const contents of transaction.contents){
+      // Checamos cuantos productos hay en la transaccion 
+      const product = await this.productRepository.findOneBy({id: contents.product.id})
+
+      // Para asegurarme de que el producto exista antes de intentar actualizar su inventario
+      if(product){
+        product.inventory += contents.quantity;
+        await this.productRepository.save(product); // Guardar el producto actualizado
+      }
+      //product.inventory += contents.quantity
+
 
       const transactionContents = await this.transactionContentsRepository.findOneBy({id: contents.id})
       // Agregamos una validacion para saber si exiten los contenidos
