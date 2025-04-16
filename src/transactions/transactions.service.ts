@@ -147,7 +147,6 @@ export class TransactionsService {
       //await this.transactionContentsRepository.remove(transactionContents)
     }
     await this.transactionRepository.remove(transaction)
-
     return {message: 'Se eliminino la venta o transaccion'}
   }
 }
