@@ -20,11 +20,12 @@ export class TransactionsService {
     // Creamos un transaction con TypeORM para primero confirmar la existencia de los prodcutos para poder generar la venta
     await this.productRepository.manager.transaction(async (transactionEntityManager) => {
       const transaction = new Transaction()
-      transaction.total = createTransactionDto.total
+      // Vamos a manejar el pago total por los contenidos
+      const total = createTransactionDto.contents.reduce((total, item)=> total + (item.quantity * item.price), 0)      
+      transaction.total = total
       await transactionEntityManager.save(transaction)
 
       for (const contents of createTransactionDto.contents) {
-
         // findOne en TypeORM v0.3+ ya no acepta directamente condiciones como {id: 1}, sino que requiere explícitamente la propiedad where
         // const product = await this.productRepository.findOne({ where: { id: contents.productId } })
         const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId })
