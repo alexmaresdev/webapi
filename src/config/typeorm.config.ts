@@ -9,6 +9,7 @@ export const typeOrmConfig = (configService: ConfigService): TypeOrmModuleOption
     username: configService.get('DATABASE_USER'),
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_NAME'),
+    logging: false, // Lo deshabilitamos de momento
     // Debug Database
     // logging: true,
     entities: [join(__dirname + '../../**/*.entity.{js,ts}')]  ,
