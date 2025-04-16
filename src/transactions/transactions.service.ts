@@ -94,15 +94,45 @@ export class TransactionsService {
     return this.transactionRepository.find(options)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async findOne(id: number) {
+    const transaction = await this.transactionRepository.findOne({
+      where: {
+        id
+      },
+      relations: {
+        contents:true
+      }
+    })
+
+    // Checamos si existe la transaccion o venta
+    if (!transaction) {
+      throw new NotFoundException('Transaccion o venta no encontrada')
+    }
+    // Si todo sale bien mostramos la venta o transaccion
+    return transaction
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
+  // update(id: number, updateTransactionDto: UpdateTransactionDto) {
+  //   return `This action updates a #${id} transaction`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: number) {
+    const transaction = await this.findOne(id)
+
+    for(const contents of transaction.contents){
+
+      const transactionContents = await this.transactionContentsRepository.findOneBy({id: contents.id})
+      // Agregamos una validacion para saber si exiten los contenidos
+      if (transactionContents) {
+        await this.transactionContentsRepository.remove(transactionContents);
+      } else {
+        // Opcional: Manejar el caso en que no se encuentra el TransactionContents
+        console.warn(`No se encontró TransactionContents con ID: ${contents.id} para la transacción ${id}`);
+      }
+      //await this.transactionContentsRepository.remove(transactionContents)
+    }
+    await this.transactionRepository.remove(transaction)
+
+    return {message: 'Se eliminino la venta o transaccion'}
   }
 }
