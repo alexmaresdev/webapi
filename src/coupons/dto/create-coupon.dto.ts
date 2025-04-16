@@ -1,6 +1,8 @@
+
 import { IsDateString, IsInt, IsNotEmpty, Max, MAX, Min } from "class-validator"
 
-export class CreateCouponDto {
+
+export class CreateCouponDto {    
    
     @IsNotEmpty({message: 'El nombre del cupon es obligatorio'})
     name: string
