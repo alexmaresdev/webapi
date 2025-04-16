@@ -3,7 +3,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContents } from './entities/transaction.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
@@ -72,7 +72,12 @@ export class TransactionsService {
   }
 
   findAll() {
-    return `This action returns all transactions`;
+    const options : FindManyOptions<Transaction> = {
+      relations: {
+        contents: true
+      }
+    }
+    return this.transactionRepository.find(options)
   }
 
   findOne(id: number) {
