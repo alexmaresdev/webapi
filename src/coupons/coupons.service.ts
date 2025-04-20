@@ -38,7 +38,12 @@ export class CouponsService {
     return await this.couponRepository.save(coupon)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} coupon`;
+  async remove(id: number) {
+    const coupon = await this.findOne(id)
+    if (!coupon) {
+      throw new NotFoundException(`El cupon con el Id: ${id} no existe`)
+    }
+    await this.couponRepository.remove(coupon)
+    return {messge: 'Cupon eliminado exitosamente'}
   }
 }
