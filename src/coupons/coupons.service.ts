@@ -29,8 +29,13 @@ export class CouponsService {
     return coupon
   }
 
-  update(id: number, updateCouponDto: UpdateCouponDto) {
-    return `This action updates a #${id} coupon`;
+  async update(id: number, updateCouponDto: UpdateCouponDto) {
+    const coupon = await this.findOne(id)
+    Object.assign(coupon, updateCouponDto)
+    if (!coupon) {
+      throw new NotFoundException(`El cupon con el Id: ${id} no existe`)
+    }
+    return await this.couponRepository.save(coupon)
   }
 
   remove(id: number) {
