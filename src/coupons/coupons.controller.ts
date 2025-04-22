@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, HttpCode, HttpStatus } from '@nestjs/common';
 import { CouponsService } from './coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { IdValidationPipe } from 'src/common/pipes/id-validation/id-validation.pipe';
+import { ApplyCouponDto } from './dto/apply-coupon.dto';
 
 @Controller('coupons')
 export class CouponsController {
@@ -31,8 +32,17 @@ export class CouponsController {
     return this.couponsService.update(+id, updateCouponDto);
   }
 
+  // Endpoint to delete a coupon
   @Delete(':id')
   remove(@Param('id', IdValidationPipe) id: string) {
     return this.couponsService.remove(+id);
   }
+
+  // Adding new Endpoints
+  @Post('/apply')
+  @HttpCode(HttpStatus.OK)
+  applyCoupon(@Body() applyCouponDto : ApplyCouponDto ){    
+    return this.couponsService.applyCoupon(applyCouponDto.coupon_name)
+  }
+
 }
