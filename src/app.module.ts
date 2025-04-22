@@ -8,6 +8,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CouponsModule } from './coupons/coupons.module';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -16,7 +17,11 @@ import { CouponsModule } from './coupons/coupons.module';
     useFactory: typeOrmConfig,
     inject: [ConfigService]
   }), 
-  CategoriesModule, ProductsModule, TransactionsModule, CouponsModule],  
+  CategoriesModule, 
+  ProductsModule, 
+  TransactionsModule, 
+  CouponsModule 
+  ],  
   controllers: [AppController],
   providers: [AppService],
   
