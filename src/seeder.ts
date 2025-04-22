@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(SeederModule);
   const seeder = app.get(SeederService)
 
+  await app.init()
   await seeder.seed() 
   await app.close()
 }
