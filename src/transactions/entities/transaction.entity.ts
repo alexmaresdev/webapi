@@ -10,6 +10,13 @@ export class Transaction {
     @Column({type: 'decimal', precision: 10, scale:2})
     total: number
 
+    // Agregamos la funcionalidad para los cupones
+    @Column({type: 'varchar', length: 30, nullable: true})
+    coupon: string
+
+    @Column({type: 'decimal', precision: 10, scale: 2, nullable: true, default: 0})
+    discount: number
+
     // Revisar mi version de MySQL @Column({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP(6)" })
     @Column({type: 'timestamp', default:()=> "CURRENT_TIMESTAMP"})
     transactionDate: Date
@@ -28,7 +35,7 @@ export class TransactionContents {
     quantity: number
 
     @Column({type: 'decimal', precision: 10, scale:2})
-    price: number
+    price: number    
 
     @ManyToOne(()=> Product, (product)=> product.id, {eager:true, cascade:true})
     product: Product

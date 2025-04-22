@@ -7,14 +7,15 @@ import { Between, FindManyOptions, Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
+import { CouponsService } from 'src/coupons/coupons.service';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectRepository(Transaction) private readonly transactionRepository: Repository<Transaction>,
     @InjectRepository(TransactionContents) private readonly transactionContentsRepository: Repository<TransactionContents>,
-    @InjectRepository(Product) private readonly productRepository: Repository<Product>
-
+    @InjectRepository(Product) private readonly productRepository: Repository<Product>,
+    private readonly couponService: CouponsService
   ) { }
 
   async create(createTransactionDto: CreateTransactionDto) {
@@ -24,7 +25,17 @@ export class TransactionsService {
       // Vamos a manejar el pago total por los contenidos
       const total = createTransactionDto.contents.reduce((total, item)=> total + (item.quantity * item.price), 0)      
       transaction.total = total
-      await transactionEntityManager.save(transaction)
+      //await transactionEntityManager.save(transaction)
+
+      // Checamos si existe algun cupon para usarlo
+      if (createTransactionDto.coupon) {
+        const coupon = await this.couponService.applyCoupon(createTransactionDto.coupon)
+        const discount = (coupon.percentage / 100) * total
+        
+        transaction.discount = discount
+        transaction.coupon = coupon.name
+        transaction.total -= discount
+      }
 
       for (const contents of createTransactionDto.contents) {
         // findOne en TypeORM v0.3+ ya no acepta directamente condiciones como {id: 1}, sino que requiere explícitamente la propiedad where
@@ -58,13 +69,7 @@ export class TransactionsService {
         transactionContent.product = product
         transactionContent.quantity = contents.quantity
         transactionContent.transaction = transaction
-
-        //Luego, guarda el contenido de la transacción con confianza.
-        // const transactionContent = this.transactionContentsRepository.create({
-        //   ...contents,
-        //   transaction,
-        //   product,
-        // });
+        
         await transactionEntityManager.save(transaction)
         await transactionEntityManager.save(transactionContent)
       }
