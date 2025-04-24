@@ -9,36 +9,36 @@ import { Category } from './entities/category.entity';
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectRepository(Category) private readonly categoryRepository : Repository<Category>
-  ){}
+    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>
+  ) { }
 
-  create(createCategoryDto: CreateCategoryDto) {    
-    return this.categoryRepository.save(createCategoryDto);  
+  create(createCategoryDto: CreateCategoryDto) {
+    return this.categoryRepository.save(createCategoryDto);
   }
 
   findAll() {
-    return this.categoryRepository.find(); 
+    return this.categoryRepository.find();
   }
 
   async findOne(id: number, products?: string) {
-    const options : FindManyOptions<Category> = {
+    const options: FindManyOptions<Category> = {
       where: {
         id
       }
     }
-    
+
     // Si tenemos productos en la url
     if (products === "true") {
       options.relations = {
         products: true
       }
     }
-    
+
     const category = await this.categoryRepository.findOne(options)
-    if(!category) {
+    if (!category) {
       throw new NotFoundException('La categoria no existe')
     }
-    return category;    
+    return category;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
