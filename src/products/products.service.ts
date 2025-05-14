@@ -27,8 +27,7 @@ export class ProductsService {
     return this.productRepository.save({
       ...createProductDto,
       category
-    })
-    console.log(Product)
+    })  
    
   }
 
