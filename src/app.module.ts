@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { SeederModule } from './seeder/seeder.module';
+import { UploadImageModule } from './upload-image/upload-image.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,7 +21,7 @@ import { SeederModule } from './seeder/seeder.module';
   CategoriesModule, 
   ProductsModule, 
   TransactionsModule, 
-  CouponsModule 
+  CouponsModule, UploadImageModule 
   ],  
   controllers: [AppController],
   providers: [AppService],
