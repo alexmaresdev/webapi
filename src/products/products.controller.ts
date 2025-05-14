@@ -53,7 +53,7 @@ export class ProductsController {
     if (!file) {
       throw new BadRequestException('La imagen es obligatoria')
     }
-    this.uploadImageService.uploadFile(file)
+    return this.uploadImageService.uploadFile(file)
   }
 
 }

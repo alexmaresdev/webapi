@@ -5,7 +5,7 @@ const streamifier = require('streamifier')
 
 @Injectable()
 export class UploadImageService {
-    uploadFile(file : Express.Multer.File): Promise<CloudinaryResponse> {
+    uploadFile(file: Express.Multer.File) : Promise<CloudinaryResponse> {
         return new Promise<CloudinaryResponse>((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 (error, result) => {
@@ -13,7 +13,7 @@ export class UploadImageService {
                     if (!result) {
                         return reject(new Error('La subida a Cloudinary falló: No se obtuvo resultado y no se especificó un error.'));
                     }
-                    resolve(result as CloudinaryResponse);
+                    resolve(result);
                 }
             )
             streamifier.createReadStream(file.buffer).pipe(uploadStream)
