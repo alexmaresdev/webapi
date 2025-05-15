@@ -22,6 +22,7 @@ export class SeederService {
         const conecction = this.dataSource
         await conecction.dropDatabase()
         await conecction.synchronize()
+        
     }
 
     async seed() {
